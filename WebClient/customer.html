@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>My Customer App</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<script type="text/javascript" src="angular.js"></script>
+<script type="text/javascript" src="customerApp.js"></script>
+<script type="text/javascript" src="customer.controller2.js"></script>
+</head>
+<body ng-app="CustomerModule">
+	<div class="container" ng-controller="CustomerController as ctrl">
+	<div class="row">
+	   <div class="col-md-6">
+			<ul class="list-group">
+	  			<li class="list-group-item" ng-repeat="customer in ctrl.customers" ng-click="ctrl.showCustomerDetails($index)">
+	  				<span>{{customer.firstname + " " + customer.lastname | uppercase}}</span>
+	  			</li>
+	  		</ul>
+	  		<p>
+	  			<button ng-click="ctrl.addUser()" >Add</button>
+	  		</p>
+		</div>
+		<div class="col-md-6">
+			<div class="alert alert-success" ng-if="ctrl.successMessage">{{ctrl.successMessage}}</div>
+			<div class="alert alert-danger" ng-if="ctrl.errorMessage">{{ctrl.errorMessage}}</div>
+			<div class="media">
+			  <div class="media-body">
+			  	<button ng-show="ctrl.editMode" ng-click="ctrl.editDetails()">Edit</button>
+			  	<button ng-hide="ctrl.editMode" ng-click="ctrl.saveDetails()">Save</button>
+			    <div class="media-heading">
+			    	  <div>
+			    	  	<span>First Name :: </span>
+			    	  	<span ng-show="ctrl.editMode">{{ctrl.selectedCustomer.firstname }}</span>
+			    	  	<input ng-hide="ctrl.editMode" ng-model="ctrl.selectedCustomer.firstname" />
+			    	  </div>
+			    	  <div>
+			    	  	<span>Last Name :: </span>
+			    	  	<span ng-show="ctrl.editMode">{{ctrl.selectedCustomer.lastname}}</span>
+			    	  	<input ng-hide="ctrl.editMode" ng-model="ctrl.selectedCustomer.lastname" />
+			    	  </div>
+			    	  <div>
+			    	  	<span>Address :: </span>
+			    	  	<span ng-show="ctrl.editMode">{{ctrl.selectedCustomer.address}}</span>
+			    	  	<input ng-hide="ctrl.editMode" ng-model="ctrl.selectedCustomer.address" />
+			    	  </div>
+			    </div>
+			    
+			  </div>
+			</div>
+		</div>
+		</div>
+	</div>
+
+</body>
+</html>
