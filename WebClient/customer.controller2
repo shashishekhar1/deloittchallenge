@@ -1,0 +1,117 @@
+(function() {
+	var app = angular.module("CustomerModule");
+	app.controller("CustomerController", CustomerController);
+	
+	app.service("RestfullCustomerDataService", function($http){
+		var self = this;
+
+		self.getCustomers = function(){
+			var promise1 = $http.get('http://localhost:9090/customers');
+			var promise2 = promise1.then(function(response){
+				return response.data;
+			});
+			//console.log(promise2);
+			return promise2;
+		}
+		
+		self.saveCustomerData = function(userData){
+		 return	$http.put('http://localhost:9090/customers' + userData.id, userData)
+			.then(function(reponse){
+				console.log(reponse);
+			});
+			
+		}
+		
+		self.addNewCustomer = function(userData){
+			return $http.post('http://localhost:9090/customers', userData)
+			.then(function(response){
+				console.log(response);
+			});
+		}
+	});
+	
+	function CustomerController(CustomerDataService, RestfullCustomerDataService) {
+		console.log(RestfullCustomerDataService);
+	/*	this.showCustomerDetails = function(index) {
+			this.selectedCustomers = this.customers[index];
+			LoggingSvc(" Getting details for "
+					+ this.customers[index].name.first);
+		}
+
+		this.customers = CustomersDataService.Customers;
+
+		this.selectedCustomer = this.customer[0];
+		*/
+		var self = this;
+		self.editMode = true;
+		self.addMode = false;
+		
+		self.editDetails = function(){
+			self.editMode = !self.editMode;
+		}
+		
+		self.saveDetails = function(){
+			self.editMode = !self.editMode;
+			var userData = self.selectedCustomer;
+			console.log(userData);
+			
+			if(self.addMode){
+				RestfullCustomerDataService.addNewCustomer(userData)
+				.then(function(response){
+					self.successMessage = "Data Successfull Added!!!";
+					
+				},function(respone){
+					self.errorMessage = "Error Response!... Try Again!...";
+				});
+				self.addMode = false;
+			}
+			else{
+				RestfullCustomerDataService.saveCustomerData(userData)
+				.then(function(response){
+					self.successMessage = "Data Successfull Updated!!!";
+					
+				},function(respone){
+					self.errorMessage = "Error Response!... Try Again!...";
+				});
+			}
+			
+		}
+		
+		self.addUser = function(){
+			self.addMode = true;
+			this.selectedCustomer = {
+					"id" : self.customers.length + 1
+			};
+			self.editMode = false;
+		}
+		
+		RestfullCustomerDataService.getCustomers().then(function(data){
+			self.Customers = data;
+			self.selectedCustomer = self.customers[0];
+		});
+		
+		self.showCustomerDetails = function(index){
+			self.successMessage = undefined;
+			self.errorMessage = undefined;
+			self.selectedCustomer = self.customers[index];
+		}
+	}
+
+	app.service("CustomerDataService", function() {
+		
+						this.customers = [
+								{
+									"id": "1",
+									"firstname" : "Shashi",
+									"lastname" : "Prashar",
+									"address" : "Strathfield, NSW",
+								},
+								{
+									"id": "2",
+									"firstname" : "Shuja",
+									"lastname" : "Rehman",
+									"address" : "Strathfield, NSW",
+								}];
+					});
+
+})();
