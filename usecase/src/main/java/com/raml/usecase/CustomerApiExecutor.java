@@ -17,6 +17,14 @@ import org.json.simple.parser.ParseException;
 
 import com.raml.usecase.models.Customer;
 
+/**
+*This class will call the webservice and update the records in an in Memory Map,
+*based on following conditions.
+*1) If the customer is present and a record is received, he is updated.
+*2) If the customer is not present and a new record is receive he is added.
+*3) If a customer record is not received and he is present he is deleted.
+*
+*/
 public class CustomerApiExecutor implements Runnable{
 	private URL url = null;
 	private HttpURLConnection conn = null;
@@ -80,7 +88,10 @@ public class CustomerApiExecutor implements Runnable{
 			countOfPreviousCustomerId.addAll(allCustomerdata.keySet());
 		}
 	}
-
+	
+	/**
+	*This function removes the customer records not received in new web service call.
+	*/
 	private void removeCustomersNotReceivedInUpdate(){
 		for(int id : countOfPreviousCustomerId){
 
