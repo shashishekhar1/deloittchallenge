@@ -1,0 +1,196 @@
+#%RAML 1.0
+title: Remote Customer API
+version: 1.0
+baseUri: http://api.onlineshopping.com/
+baseUriParamaters: {}
+documentation:
+- title: Remote Customer API
+  content: This api will help us manage customers currently, and further develop online application.
+types:
+  Customer:
+    example:
+      value:
+        id: 121
+        firstname: Shekhar
+        lastname: Prashar
+        address: Strathfield, NSW 2113
+    displayName: Customer
+    description: Customer Definition
+    type: object
+    properties:
+      firstname:
+        required: true
+        displayName: firstname
+        type: string
+      lastname:
+        required: true
+        displayName: lastname
+        type: string
+      address:
+        required: true
+        displayName: address
+        type: string
+      id:
+        required: true
+        displayName: id
+        type: integer
+        format: int64
+/customers:
+  get:
+    displayName: GetAllCustomers
+    description: Returns a list of customers
+    responses:
+      200:
+        description: Success
+        body:
+          application/json:
+            example:
+              value: |
+                {
+                                {
+                                  "id":101,
+                                  "firstname": "Shashi",
+                                  "lastname": "Prashar",
+                                  "address": "Strathfield, NSW"
+                                },
+                                {
+                                  "id":102,
+                                  "firstname": "Shuja",
+                                  "lastname": "Rehman",
+                                  "address": "Parramatta, NSW"
+                                }
+                }
+            displayName: response
+            type: array
+            items:
+              type: Customer
+  post:
+    displayName: AddNewCutomer
+    description: This service will add a new customer
+    queryParameters:
+      firstname:
+        required: true
+        example:
+          value: Shekhar
+        displayName: firstname
+        type: string
+      lastname:
+        required: true
+        example:
+          value: Prashar
+        displayName: lastname
+        type: string
+      id:
+        required: true
+        example:
+          value: 121
+        displayName: id
+        type: integer
+        format: int64
+      address:
+        required: false
+        example:
+          value: Strathfield, NSW 2113
+        displayName: address
+        type: string
+    responses:
+      200:
+        description: Success
+        body:
+          application/json:
+            example:
+              value:
+                id: 121
+                firstname: Shekhar
+                lastname: Prashar
+                address: Strathfield, NSW 2113
+            displayName: response
+            type: Customer
+      400:
+        description: Invalid request
+        body: {}
+  /{id}:
+    uriParameters:
+      id:
+        required: true
+        example:
+          value: 101
+        displayName: id
+        type: integer
+        format: int64
+    get:
+      displayName: GetCustomerByID
+      description: This api will get customer by id
+      responses:
+        200:
+          description: Success
+          body:
+            application/json:
+              example:
+                value:
+                  id: 101
+                  firstname: Shekhar
+                  lastname: Prashar
+                  address: Strathfield, NSW 2113
+              displayName: response
+              type: Customer
+        404:
+          description: Customer not found
+          body: {}
+    put:
+      displayName: UpdateExistingCustomer
+      description: This api will update existing customer by id.
+      queryParameters:
+        firstname:
+          required: true
+          example:
+            value: Shekhar
+          displayName: firstname
+          type: string
+        lastname:
+          required: true
+          example:
+            value: Prashar
+          displayName: lastname
+          type: string
+        address:
+          required: true
+          example:
+            value: Parramatta, NSW 2135
+          displayName: address
+          type: string
+      responses:
+        200:
+          description: Success
+          body:
+            application/json:
+              example:
+                value:
+                  id: 101
+                  firstname: Shekhar
+                  lastname: Prashar
+                  address: Parramatta, NSW 2135
+              displayName: response
+              type: Customer
+        404:
+          description: Customer {lastname} not found
+          body: {}
+    delete:
+      displayName: DeleteCustomer
+      description: This will delete customer using customer id.
+      responses:
+        200:
+          description: Success
+          body:
+            application/json:
+              example:
+                value:
+                  id: 101
+                  firstname: Shashi
+                  lastname: Prashar
+                  address: Strathfield, NSW
+              displayName: response
+              type: Customer
+        404:
+          description: Customer not found
+          body: {}
